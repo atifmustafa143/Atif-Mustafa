@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMentor | Learn Programming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Main Styles */
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A47A3;
+            --light: #F8F9FA;
+            --dark: #2A2D34;
+            --text: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation - Enhanced for mobile */
+        .navbar {
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 5%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            z-index: 1001;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Hero Section - Better mobile scaling */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            width: fit-content;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        /* Lessons Section - Better grid for mobile */
+        .section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .lessons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .lesson-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-img {
+            height: 180px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: var(--primary);
+        }
+
+        .lesson-content {
+            padding: 1.5rem;
+        }
+
+        .lesson-content h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .lesson-content p {
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Code Playground - Better mobile experience */
+        .code-playground {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5%;
+        }
+
+        .editor-container {
+            background: #1E1E1E;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .editor-toolbar {
+            padding: 0.8rem 1rem;
+            background: #252526;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #code-input {
+            width: 100%;
+            min-height: 150px;
+            background: #1E1E1E;
+            color: #d4d4d4;
+            padding: 1rem;
+            border: none;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            font-size: 0.9rem;
+        }
+
+        #output {
+            background: #1E1E1E;
+            color: #4EC9B0;
+            padding: 1rem;
+            min-height: 50px;
+            border-top: 1px solid #252526;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        /* Footer - Better spacing */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 5rem 1.5rem 2rem;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--primary);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero {
+                padding-top: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero {
+                min-height: 500px;
+                text-align: center;
+                align-items: center;
+            }
+
+            .hero p {
+                text-align: center;
+            }
+
+            .btn {
+                margin: 0 auto;
+            }
+
+            .lesson-img {
+                height: 150px;
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .code-playground {
+                padding: 3rem 1.5rem;
+            }
+
+            .editor-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+                padding: 0.8rem;
+            }
+
+            #run-code {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+
+            .mobile-menu {
+                width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">HBA- CODERZ</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#lessons">Lessons</a>
+            <a href="#practice">Practice</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home">Home</a>
+        <a href="#lessons">Lessons</a>
+        <a href="#practice">Practice</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Learn to Code<br>the Right Way</h1>
+        <p>Interactive coding lessons designed for beginners. Master programming fundamentals with hands-on examples.</p>
+        <a href="#lessons" class="btn">Start Learning</a>
+    </section>
+
+    <!-- Lessons Section -->
+    <section id="lessons" class="section">
+        <h2 class="section-title">Our Lessons</h2>
+        <div class="lessons-container">
+            <!-- Lesson 1 -->
+            <div class="lesson-card">
+                <div class="lesson-img">
+                    <i class="fab fa-html5"></i>
+                </div>
+                <div class="lesson-content">
+                    <h3>HTML Fundamentals</h3>
+                    <p>Learn the building blocks of web development with HTML.</p>
+                    <a href="https://www.w3schools.com/html/html_basic.asp"><button class="btn"  >Satart Lesson</button><a href="https://www.w3schools.com/html/html_basic.asp"></a>
+                </div>
+            </div>
+
+            <!-- Lesson 2 -->
+            <div class="lesson-card">
+                <div class="lesson-img">
+                    <i class="fab fa-css3-alt"></i>
+                </div>
+                <div class="lesson-content">
+                    <h3>CSS Styling</h3>
+                    <p>Make your websites beautiful with CSS.</p>
+                    <a href="https://www.w3schools.com/css/">><button class="btn">Start Lesson</button></a>
+                </div>
+            </div>
+
+            <!-- Lesson 3 -->
+            <div class="lesson-card">
+                <div class="lesson-img">
+                    <i class="fab fa-js"></i>
+                </div>
+                <div class="lesson-content">
+                    <h3>JavaScript Basics</h3>
+                    <p>Add interactivity to your websites.</p>
+                    <a href="https://www.w3schools.com/js/"><button class="btn">Start Lesson</button> </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Playground -->
+    <section id="practice" class="code-playground">
+        <h2 class="section-title" style="color: white;">Practice Coding</h2>
+        <p style="text-align: center; margin-bottom: 1rem;">Try out what you've learned in our interactive editor</p>
+        
+        <div class="editor-container">
+            <div class="editor-toolbar">
+                <span>JavaScript</span>
+                <button id="run-code" class="btn" style="padding: 0.5rem 1.5rem;">Run Code</button>
+            </div>
+            <textarea id="code-input">// Write your JavaScript code here
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+console.log(greet("Learner"));</textarea>
+            <div id="output"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <h2 class="section-title" style="color: white;">CodeMentor</h2>
+        <p>Teaching programming fundamentals to the next generation of developers.</p>
+        
+        <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        
+        <p>&copy; 2025 CodeMentor. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        overlay.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Interactive code runner
+        document.getElementById('run-code').addEventListener('click', function() {
+            const code = document.getElementById('code-input').value;
+            try {
+                const output = eval(code);
+                document.getElementById('output').innerText = output;
+            } catch (error) {
+                document.getElementById('output').innerText = 'Error: ' + error.message;
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Lesson card interaction
+        document.querySelectorAll('.lesson-card .btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const lessonTitle = this.closest('.lesson-content').querySelector('h3').textContent;
+                alert('Starting lesson: ' + lessonTitle + '\n\nThis would open the lesson content in a real implementation.');
+            });
+        });
+
+        // Better mobile viewport height handling
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', ${vh}px);
+        }
+
+        setViewportHeight();
+        window.addEventListener('resize', setViewportHeight);
+    </script>
+</body>
+</html>
